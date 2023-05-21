@@ -21,11 +21,11 @@
 #define EXIT -3
 
 /* Global environemnt */
-extern char **environ;
+extern char **Aenviron;
 /* Global program name */
-char *name;
+char *Aname;
 /* Global history counter */
-int hist;
+int Ahist;
 
 /**
  * struct list_s - A new struct type defining a linked list.
@@ -66,66 +66,66 @@ typedef struct alias_s
 alias_t *Aaliases;
 
 /* Main Helpers */
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
-void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
-char **_strtok(char *line, char *delim);
-char *get_location(char *command);
-list_t *get_path_dir(char *path);
-int execute(char **args, char **front);
-void free_list(list_t *head);
+ssize_t _getline(char **Alineptr, size_t *n, FILE *Astream);
+void *_realloc(void *Aptr, unsigned int Aold_size, unsigned int Anew_size);
+char **_strtok(char *Aline, char *Adelim);
+char *get_location(char *Acommand);
+list_t *get_path_dir(char *Apath);
+int execute(char **Aargs, char **Afront);
+void free_list(list_t *Ahead);
 char *_itoa(int num);
 
 /* Input Helpers */
-void handle_line(char **line, ssize_t read);
-void variable_replacement(char **args, int *exe_ret);
-char *get_args(char *line, int *exe_ret);
-int call_args(char **args, char **front, int *exe_ret);
-int run_args(char **args, char **front, int *exe_ret);
-int handle_args(int *exe_ret);
-int check_args(char **args);
-void free_args(char **args, char **front);
-char **replace_aliases(char **args);
+void handle_line(char **Aline, ssize_t Aread);
+void variable_replacement(char **Aargs, int *Aexe_ret);
+char *get_args(char *Aline, int *Aexe_ret);
+int call_args(char **Aargs, char **Afront, int *Aexe_ret);
+int run_args(char **Aargs, char **Afront, int *Aexe_ret);
+int handle_args(int *Aexe_ret);
+int check_args(char **Aargs);
+void free_args(char **Aargs, char **Afront);
+char **replace_aliases(char **Aargs);
 
 /* String functions */
 int _strlen(const char *s);
-char *_strcat(char *dest, const char *src);
-char *_strncat(char *dest, const char *src, size_t n);
-char *_strcpy(char *dest, const char *src);
+char *_strcat(char *Adest, const char *Asrc);
+char *_strncat(char *Adest, const char *Asrc, size_t n);
+char *_strcpy(char *Adest, const char *Asrc);
 char *_strchr(char *s, char c);
-int _strspn(char *s, char *accept);
+int _strspn(char *s, char *Aaccept);
 int _strcmp(char *s1, char *s2);
 int _strncmp(const char *s1, const char *s2, size_t n);
 
 /* Builtins */
-int (*get_builtin(char *command))(char **args, char **front);
-int shellby_exit(char **args, char **front);
-int shellby_env(char **args, char __attribute__((__unused__)) **front);
-int shellby_setenv(char **args, char __attribute__((__unused__)) **front);
-int shellby_unsetenv(char **args, char __attribute__((__unused__)) **front);
-int shellby_cd(char **args, char __attribute__((__unused__)) **front);
-int shellby_alias(char **args, char __attribute__((__unused__)) **front);
-int shellby_help(char **args, char __attribute__((__unused__)) **front);
+int (*get_builtin(char *Acommand))(char **Aargs, char **Afront);
+int shellby_exit(char **Aargs, char **Afront);
+int shellby_env(char **Aargs, char __attribute__((__unused__)) **Afront);
+int shellby_setenv(char **Aargs, char __attribute__((__unused__)) **Afront);
+int shellby_unsetenv(char **Aargs, char __attribute__((__unused__)) **Afront);
+int shellby_cd(char **Aargs, char __attribute__((__unused__)) **Afront);
+int shellby_alias(char **Aargs, char __attribute__((__unused__)) **Afront);
+int shellby_help(char **Aargs, char __attribute__((__unused__)) **Afront);
 
 /* Builtin Helpers */
 char **_copyenv(void);
 void free_env(void);
-char **_getenv(const char *var);
+char **_getenv(const char *Avar);
 
 /* Error Handling */
-int create_error(char **args, int err);
-char *error_env(char **args);
-char *error_1(char **args);
-char *error_2_exit(char **args);
-char *error_2_cd(char **args);
-char *error_2_syntax(char **args);
-char *error_126(char **args);
-char *error_127(char **args);
+int create_error(char **Aargs, int Aerr);
+char *error_env(char **Aargs);
+char *error_1(char **Aargs);
+char *error_2_exit(char **Aargs);
+char *error_2_cd(char **Aargs);
+char *error_2_syntax(char **Aargs);
+char *error_126(char **Aargs);
+char *error_127(char **Aargs);
 
 /* Linkedlist Helpers */
-alias_t *add_alias_end(alias_t **head, char *name, char *value);
-void free_alias_list(alias_t *head);
-list_t *add_node_end(list_t **head, char *dir);
-void free_list(list_t *head);
+alias_t *add_alias_end(alias_t **Ahead, char *Aname, char *Avalue);
+void free_alias_list(alias_t *Ahead);
+list_t *add_node_end(list_t **Ahead, char *Adir);
+void free_list(list_t *Ahead);
 
 void help_all(void);
 void help_alias(void);
@@ -137,5 +137,5 @@ void help_setenv(void);
 void help_unsetenv(void);
 void help_history(void);
 
-int proc_file_commands(char *file_path, int *exe_ret);
+int proc_file_commands(char *Afile_path, int *Aexe_ret);
 #endif /* _SHELL_H_ */
