@@ -138,7 +138,7 @@ char *error_2_cd(char **Aargs)
 
 /**
  * error_2_syntax - Creates an error message for syntax errors.
- * @args: An array of arguments passed to the command.
+ * @Aargs: An array of arguments passed to the command.
  *
  * Return: The error string.
  */

@@ -5,7 +5,7 @@ void set_alias(char *Avar_name, char *Avalue);
 void print_alias(alias_t *Aalias);
 
 /**
- * ashellby_alias - Builtin command that either prints all aliases, specific
+ * shellby_alias - Builtin command that either prints all aliases, specific
  * aliases, or sets an alias.
  * @Aargs: An array of arguments.
  * @Afront: A double pointer to the beginning of args.
