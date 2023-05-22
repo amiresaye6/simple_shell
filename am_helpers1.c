@@ -110,7 +110,7 @@ void variable_replacement(char **Aline, int *Aexe_ret)
 		{
 			if (Aold_line[j + 1] == '$')
 			{
-				Areplacement = Aget_pid();
+				Areplacement = get_pid();
 				k = j + 2;
 			}
 			else if (Aold_line[j + 1] == '?')

@@ -1,13 +1,7 @@
-/*
- * File: main.c
- * 
- *          
- */
-
 #include "shell.h"
 
 void sig_handler(int sig);
-int execute(char **args, char **front);
+int execute(char **aargs, char **afront);
 
 /**
  * sig_handler - Prints a new prompt upon a signal.
@@ -24,17 +18,17 @@ void sig_handler(int sig)
 
 /**
  * execute - Executes a command in a child process.
- * @args: An array of arguments.
- * @front: A double pointer to the beginning of args.
+ * @aargs: An array of arguments.
+ * @afront: A double pointer to the beginning of aargs.
  *
  * Return: If an error occurs - a corresponding error code.
  *         O/w - The exit value of the last executed command.
  */
-int execute(char **args, char **front)
+int execute(char **aargs, char **afront)
 {
 	pid_t child_pid;
 	int status, flag = 0, ret = 0;
-	char *command = args[0];
+	char *command = aargs[0];
 
 	if (command[0] != '/' && command[0] != '.')
 	{
@@ -45,9 +39,9 @@ int execute(char **args, char **front)
 	if (!command || (access(command, F_OK) == -1))
 	{
 		if (errno == EACCES)
-			ret = (create_error(args, 126));
+			ret = (create_error(aargs, 126));
 		else
-			ret = (create_error(args, 127));
+			ret = (create_error(aargs, 127));
 	}
 	else
 	{
@@ -61,12 +55,12 @@ int execute(char **args, char **front)
 		}
 		if (child_pid == 0)
 		{
-			execve(command, args, environ);
+			execve(command, aargs, environ);
 			if (errno == EACCES)
-				ret = (create_error(args, 126));
+				ret = (create_error(aargs, 126));
 			free_env();
-			free_args(args, front);
-			free_alias_list(aliases);
+			free_args(aargs, afront);
+			free_alias_list(Aaliases);
 			_exit(ret);
 		}
 		else
@@ -93,9 +87,9 @@ int main(int argc, char *argv[])
 	int *exe_ret = &retn;
 	char *prompt = "$ ", *new_line = "\n";
 
-	name = argv[0];
-	hist = 1;
-	aliases = NULL;
+	Aname = argv[0];
+	Ahist = 1;
+	Aaliases = NULL;
 	signal(SIGINT, sig_handler);
 
 	*exe_ret = 0;
@@ -107,7 +101,7 @@ int main(int argc, char *argv[])
 	{
 		ret = proc_file_commands(argv[1], exe_ret);
 		free_env();
-		free_alias_list(aliases);
+		free_alias_list(Aaliases);
 		return (*exe_ret);
 	}
 
@@ -116,7 +110,7 @@ int main(int argc, char *argv[])
 		while (ret != END_OF_FILE && ret != EXIT)
 			ret = handle_args(exe_ret);
 		free_env();
-		free_alias_list(aliases);
+		free_alias_list(Aaliases);
 		return (*exe_ret);
 	}
 
@@ -129,12 +123,12 @@ int main(int argc, char *argv[])
 			if (ret == END_OF_FILE)
 				write(STDOUT_FILENO, new_line, 1);
 			free_env();
-			free_alias_list(aliases);
+			free_alias_list(Aaliases);
 			exit(*exe_ret);
 		}
 	}
 
 	free_env();
-	free_alias_list(aliases);
+	free_alias_list(Aaliases);
 	return (*exe_ret);
 }

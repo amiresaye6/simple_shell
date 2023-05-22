@@ -1,32 +1,26 @@
-/*
- * File: proc_file_comm.c
- * 
- *          
- */
-
 #include "shell.h"
 
-int cant_open(char *file_path);
-int proc_file_commands(char *file_path, int *exe_ret);
+int cant_open(char *afile_path);
+int proc_file_commands(char *afile_path, int *aexe_ret);
 
 /**
  * cant_open - If the file doesn't exist or lacks proper permissions, print
  * a cant open error.
- * @file_path: Path to the supposed file.
+ * @afile_path: Path to the supposed file.
  *
  * Return: 127.
  */
 
-int cant_open(char *file_path)
+int cant_open(char *afile_path)
 {
 	char *error, *hist_str;
 	int len;
 
-	hist_str = _itoa(hist);
+	hist_str = _itoa(Ahist);
 	if (!hist_str)
 		return (127);
 
-	len = _strlen(name) + _strlen(hist_str) + _strlen(file_path) + 16;
+	len = _strlen(Aname) + _strlen(hist_str) + _strlen(afile_path) + 16;
 	error = malloc(sizeof(char) * (len + 1));
 	if (!error)
 	{
@@ -34,11 +28,11 @@ int cant_open(char *file_path)
 		return (127);
 	}
 
-	_strcpy(error, name);
+	_strcpy(error, Aname);
 	_strcat(error, ": ");
 	_strcat(error, hist_str);
 	_strcat(error, ": Can't open ");
-	_strcat(error, file_path);
+	_strcat(error, afile_path);
 	_strcat(error, "\n");
 
 	free(hist_str);
@@ -50,14 +44,14 @@ int cant_open(char *file_path)
 /**
  * proc_file_commands - Takes a file and attempts to run the commands stored
  * within.
- * @file_path: Path to the file.
- * @exe_ret: Return value of the last executed command.
+ * @afile_path: Path to the file.
+ * @aexe_ret: Return value of the last executed command.
  *
  * Return: If file couldn't be opened - 127.
  *	   If malloc fails - -1.
  *	   Otherwise the return value of the last command ran.
  */
-int proc_file_commands(char *file_path, int *exe_ret)
+int proc_file_commands(char *afile_path, int *aexe_ret)
 {
 	ssize_t file, b_read, i;
 	unsigned int line_size = 0;
@@ -66,12 +60,12 @@ int proc_file_commands(char *file_path, int *exe_ret)
 	char buffer[120];
 	int ret;
 
-	hist = 0;
-	file = open(file_path, O_RDONLY);
+	Ahist = 0;
+	file = open(afile_path, O_RDONLY);
 	if (file == -1)
 	{
-		*exe_ret = cant_open(file_path);
-		return (*exe_ret);
+		*aexe_ret = cant_open(afile_path);
+		return (*aexe_ret);
 	}
 	line = malloc(sizeof(char) * old_size);
 	if (!line)
@@ -79,7 +73,7 @@ int proc_file_commands(char *file_path, int *exe_ret)
 	do {
 		b_read = read(file, buffer, 119);
 		if (b_read == 0 && line_size == 0)
-			return (*exe_ret);
+			return (*aexe_ret);
 		buffer[b_read] = '\0';
 		line_size += b_read;
 		line = _realloc(line, old_size, line_size);
@@ -97,7 +91,7 @@ int proc_file_commands(char *file_path, int *exe_ret)
 				line[i] = ' ';
 		}
 	}
-	variable_replacement(&line, exe_ret);
+	variable_replacement(&line, aexe_ret);
 	handle_line(&line, line_size);
 	args = _strtok(line, " ");
 	free(line);
@@ -105,9 +99,9 @@ int proc_file_commands(char *file_path, int *exe_ret)
 		return (0);
 	if (check_args(args) != 0)
 	{
-		*exe_ret = 2;
+		*aexe_ret = 2;
 		free_args(args, args);
-		return (*exe_ret);
+		return (*aexe_ret);
 	}
 	front = args;
 
@@ -117,13 +111,13 @@ int proc_file_commands(char *file_path, int *exe_ret)
 		{
 			free(args[i]);
 			args[i] = NULL;
-			ret = call_args(args, front, exe_ret);
+			ret = call_args(args, front, aexe_ret);
 			args = &args[++i];
 			i = 0;
 		}
 	}
 
-	ret = call_args(args, front, exe_ret);
+	ret = call_args(args, front, aexe_ret);
 
 	free(front);
 	return (ret);
